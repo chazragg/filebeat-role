@@ -1,0 +1,32 @@
+- name: Linux || Ensure config folders exsists
+  become: true
+  ansible.builtin.file:
+    name: "/etc/filebeat/{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - inputs.d
+    - modules.d
+
+- name: Linux || Render filebeat configuration file
+  become: true
+  ansible.builtin.template:
+    mode: 0755
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+
+- name: Linux || Render inputs configuration
+  become: true
+  ansible.builtin.template:
+    mode: 0755
+    src: inputs.yml.j2
+    dest: /etc/filebeat/inputs.d/inputs.yml
+  when: filebeat_inputs is defined
+
+- name: Linux || Render modules configuration
+  become: true
+  ansible.builtin.template:
+    mode: 0755
+    src: modules.yml.j2
+    dest: /etc/filebeat/modules.d/modules.yml
+  when: filebeat_modules is defined

@@ -1,0 +1,5 @@
+---
+# defaults file for filebeat
+major_version: 8
+minor_version: 1
+patch_version: 0

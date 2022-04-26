@@ -1,0 +1,8 @@
+- name: MSI || Uninsatll filebeat
+  ansible.windows.win_package:
+    path: 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{{ major_version }}.{{ minor_version }}.{{ patch_version }}-windows-x86_64.msi'
+    state: absent
+    creates_service: 'Elastic Filebeat {{ major_version }}.{{ minor_version }}.{{ patch_version }}'
+    creates_path: 'C:\Program Files\Elastic\Beats\{{ major_version }}.{{ minor_version }}.{{ patch_version }}\filebeat\filebeat.exe'
+    product_id: '{84CD8645-4DB1-5D89-81E3-071FE28C0EAE}'
+  notify: Windows cleanup

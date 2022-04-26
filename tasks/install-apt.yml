@@ -1,0 +1,16 @@
+- name: APT || Add elastic apt key
+  ansible.builtin.apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+- name: APT || Install Dependencies
+  ansible.builtin.apt:
+    name: apt-transport-https
+    state: present
+- name: APT || Save repository definition
+  ansible.builtin.apt_repository:
+    repo: "deb https://artifacts.elastic.co/packages/{{ major_version }}.x/apt stable main"
+    state: present
+- name: APT || Install filebeat
+  ansible.builtin.apt:
+    name: filebeat={{ major_version }}.{{ minor_version }}.{{ patch_version }}
+    update_cache: true

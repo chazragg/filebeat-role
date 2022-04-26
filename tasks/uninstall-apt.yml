@@ -1,0 +1,16 @@
+- name: APT || Uninstall filebeat
+  ansible.builtin.apt:
+    name: filebeat={{ major_version }}.{{ minor_version }}.{{ patch_version }}
+    update_cache: true
+    state: absent
+  notify: Linux cleanup
+- name: APT || Remove repository definition
+  ansible.builtin.apt_repository:
+    repo: "deb https://artifacts.elastic.co/packages/{{ major_version }}.x/apt stable main"
+    state: absent
+  notify: Linux cleanup
+- name: APT || Remove elastic apt key
+  ansible.builtin.apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: absent
+  notify: Linux cleanup

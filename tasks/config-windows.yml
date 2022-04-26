@@ -1,0 +1,26 @@
+- name: Windows || Ensure config folders exsists
+  ansible.windows.win_file:
+    name: "C:/ProgramData/Elastic/Beats/filebeat/{{ item }}"
+    state: directory
+  with_items:
+    - inputs.d
+    - modules.d
+
+- name: Windows || Render filebeat configuration file
+  ansible.windows.win_template:
+    src: filebeat.yml.j2
+    dest: C:/ProgramData/Elastic/Beats/filebeat/filebeat.yml
+  notify: Windows restart service
+
+- name: Windows || Render inputs configuration
+  ansible.windows.win_template:
+    src: inputs.yml.j2
+    dest: C:/ProgramData/Elastic/Beats/filebeat/inputs.d/inputs.yml
+  when: filebeat_inputs is defined
+
+- name: Windows || Render modules configuration
+  ansible.windows.win_template:
+    src: modules.yml.j2
+    dest: C:/ProgramData/Elastic/Beats/filebeat/modules.d/modules.yml
+  when: filebeat_modules is defined
+

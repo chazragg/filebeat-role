@@ -1,0 +1,20 @@
+- name: YUM || Uninstall public signing key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://packages.elastic.co/GPG-KEY-elasticsearch
+  notify: Linux cleanup
+- name: YUM || Remove repository file
+  ansible.builtin.yum_repository:
+    name: elastic-{{ major_version }}.x
+    baseurl: https://artifacts.elastic.co/packages/{{ major_version }}.x/yum
+    gpgcheck: true
+    description: Elastic repository for {{ major_version }}.x packages
+    gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    enabled: true
+  notify: Linux cleanup
+- name: YUM || Uninstall filebeat
+  ansible.builtin.yum:
+    name: filebeat-{{ major_version }}.{{ minor_version }}.{{ patch_version }}
+    update_cache: true
+    state: absent
+  notify: Linux cleanup

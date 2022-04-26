@@ -1,0 +1,96 @@
+---
+# tasks file for filebeat
+- name: Install for apt
+  ansible.builtin.include_tasks: 
+    file: install-apt.yml
+    apply:
+      tags: install
+      become: true
+  when: ansible_os_family == 'Debian'
+  tags: 
+    - never
+    - install
+
+- name: Install for yum
+  ansible.builtin.include_tasks: 
+    file: install-yum.yml
+    apply:
+      tags: install
+      become: true
+  when: ansible_os_family == 'RedHat'
+  tags: 
+  - never
+  - install
+
+- name: Install windows
+  ansible.builtin.include_tasks: 
+    file: install-windows.yml
+    apply:
+      tags: install
+  when: ansible_os_family == "Windows"
+  tags: 
+    - never
+    - install
+
+- name: Generate config
+  ansible.builtin.include_tasks: 
+    file: generate-config.yml
+    apply:
+      tags: config
+  tags:
+   - never
+   - config
+
+- name: Render config for Linux
+  ansible.builtin.include_tasks: 
+    file: config-linux.yml
+    apply:
+      tags: 
+        - config
+  when: ansible_os_family != "Windows"
+  tags:
+    - never
+    - config
+
+- name: Render config for Windows
+  ansible.builtin.include_tasks: 
+    file: config-windows.yml
+    apply:
+      tags: 
+        - config
+  when: ansible_os_family == "Windows"
+  tags:
+    - never
+    - config
+
+- name: Uninstall for apt
+  ansible.builtin.include_tasks: 
+    file: uninstall-apt.yml
+    apply:
+      tags: uninstall
+      become: true
+  when: ansible_os_family == 'Debian'
+  tags: 
+    - never
+    - uninstall
+
+- name: Uninstall for yum
+  ansible.builtin.include_tasks: 
+    file: uninstall-yum.yml
+    apply:
+      tags: uninstall
+      become: true
+  when: ansible_os_family == 'RedHat'
+  tags: 
+  - never
+  - uninstall
+
+- name: Uninstall windows
+  ansible.builtin.include_tasks: 
+    file: uninstall-windows.yml
+    apply:
+      tags: uninstall
+  when: ansible_os_family == "Windows"
+  tags: 
+    - never
+    - uninstall

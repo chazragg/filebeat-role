@@ -1,0 +1,54 @@
+# ================================== General ===================================
+name: {{ inventory_hostname }}
+{% if filebeat_tags is defined %}
+tags: {{ filebeat_tags | to_json }}
+{% endif %}
+{% if filebeat_fields is defined %}
+fields: {{ filebeat_fields | from_yaml }}
+{% endif %}
+{% if filebeat_fields_under_root is defined %}
+fields_under_root: {{ filebeat_fields_under_root }}
+{% endif %}
+
+# ========================== Filebeat global options ===========================
+
+filebeat.config:
+  inputs:
+    enabled: true
+    path: ${path.config}/inputs.d/*.yml
+    reload.enabled: {{ filebeat_config.inputs.reload | default(true) }}
+    reload.period: {{ filebeat_config.inputs.time | default("10s") }}
+  modules:
+    enabled: true
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: {{ filebeat_config.modules.reload | default(true) }}
+    reload.period: {{ filebeat_config.modules.time | default("10s") }}
+
+{% if filebeat_autodiscover is defined %}
+# =========================== Filebeat autodiscover ============================
+{{ filebeat_autodiscover | to_nice_yaml(indent=2, sort_keys=False) }}
+{% endif %}
+
+#================================ outputs =====================================
+ ### Elasticsearch as output
+output.{{ filebeat_output.name }}:
+{% if filebeat_output.name == "elasticsearch" %}
+  hosts: {{ filebeat_output.hosts | to_json }}
+{% if filebeat_output.username is defined and filebeat_output.password %}
+  username: {{ filebeat_output.username }}
+  password: {{ filebeat_output.password }}
+{% endif %}
+{% if filebeat_output.api_key is defined %}
+  api_key: {{ filebeat_output.api_key }}
+{% endif %}
+{% endif %}
+{% if filebeat_output.name == "logstash" %}
+  hosts: {{ filebeat_output.hosts | to_json }}
+{% endif %}
+{% if filebeat_ssl.certificate_file is defined and filebeat_ssl.key_file is defined %}
+  ssl:
+    certificate_authorities: ["{{ filebeat_ssl.dir }}/{{ filebeat_ssl.certificate_authorities | basename }}"]
+    certificate: "{{ filebeat_ssl.dir }}/{{ filebeat_ssl.certificate_file | basename }}"
+    key: "{{ filebeat_ssl.dir }}/{{ filebeat_ssl.key_file | basename}}"
+    insecure: {{ filebeat_ssl.insecure }}
+{% endif %}

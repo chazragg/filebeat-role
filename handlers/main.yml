@@ -1,0 +1,29 @@
+---
+# handlers file for filebeat
+- name: Linux restart service
+  ansible.builtin.service:
+    name: filebeat
+    state: restarted
+- name: Linux start service
+  ansible.builtin.service:
+    name: filebeat
+    state: started
+- name: Windows restart service
+  ansible.windows.win_service:
+    name: filebeat
+    state: restarted
+- name: Windows start service
+  ansible.windows.win_service:
+    name: filebeat
+    state: started
+- name: Linux cleanup
+  become: true
+  ansible.builtin.file:
+    name: "/etc/filebeat/"
+    state: absent
+- name: Windows cleanup
+  win_file:
+    path: C:\ProgramData\Elastic\Beats\filebeat
+    state: absent
+
+

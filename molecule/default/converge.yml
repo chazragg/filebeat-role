@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include elastic_stack.filebeat"
+      include_role:
+        name: "elastic_stack.filebeat"

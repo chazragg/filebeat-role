@@ -1,0 +1,28 @@
+galaxy_info:
+  author: Charles Ragg
+  namespace: elastic_stack
+  description: Installs and configures filebeat
+
+  license: MIT
+
+  min_ansible_version: 2.1
+
+  platform:
+    - name: Ubuntu
+    - name: Debian
+    - name: CentOS
+    - name: RockyLinux
+    - name: Windows server
+      version: 2022
+
+  galaxy_tags:
+    - elastic-stack
+    - beats
+    - filebeat
+    - collectors
+    - collector
+
+
+dependencies: []
+  # List your role dependencies here, one per line. Be sure to remove the '[]' above,
+  # if you add dependencies to this list.
