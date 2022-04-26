@@ -1,20 +1,20 @@
 Role Name
 =========
-Filebeat role to help install, configure and uninstall filebeat.
+Filebeat role to help install, configure and uninstall Filebeat.
 
-This role has been designed to allow for granula control over input and module declration you can define modules/inputs at an all groups level, group_var level and host_var level 
+This role has been designed to allow for granular control over input and module declaration you can define modules/inputs at an all groups level, group_var level and host_var level 
 
 Requirements
 ------------
 
-No requirments for ansible but will require and elastic stack for filebeat to report to
+No requirements for ansible but will require an elastic stack for Filebeat to report to
 
 Role Tags
 --------------
 
 - install
 - configure
-- uninsatll
+- uninstall
 
 Role Variables
 --------------
@@ -47,9 +47,9 @@ filebeat_ssl:
   key_file: foo.key
   insecure: true
 
-filebeat_autodiscover: # Set's autodiscover, you can follow any configuration defined [here](https://www.elastic.co/guide/en/beats/filebeat/current/configuration-autodiscover.html) see example for more details
+filebeat_autodiscover: # Set's autodiscover, you can follow any configuration defined [here](https://www.elastic.co/guide/en/beats/filebeat/current/configuration-autodiscover.html) see the examples for more details
 
-# set module / inputs at different levels (all are combined into a single dict one for modules one for input)
+# set module/inputs at different levels (all are combined into a single dict one for modules one for input)
 all_filebeat_modules:
 
 group_filebeat_modules:
