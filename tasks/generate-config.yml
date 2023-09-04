@@ -1,6 +1,6 @@
 - name: generate modules var
   block:
-    - name: Generate all modules configs
+    - name: Generate modules config
       set_fact:
         filebeat_modules: >
           {{
@@ -9,45 +9,18 @@
                 item
             )]
           }}
-      loop: "{{ all_filebeat_modules }}"
+      loop: 
+        - "{{ all_filebeat_modules | default() }}"
+        - "{{ host_filebeat_modules | default() }}"
+        - "{{ group_filebeat_modules | default() }}"
       loop_control:
         label: 
           - "{{ item.module }}"
-      when: all_filebeat_modules is defined
-
-    - name: Generate host modules configs
-      set_fact:
-        filebeat_modules: >
-          {{
-            (filebeat_modules | default([]))
-            + [dict(
-                item
-            )]
-          }}
-      loop: "{{ host_filebeat_modules }}"
-      loop_control:
-        label: 
-          - "{{ item.module }}"
-      when: host_filebeat_modules is defined
-    - name: Generate group modules configs
-      set_fact:
-        filebeat_modules: >
-          {{
-            (filebeat_modules | default([]))
-            + [dict(
-                item
-            )]
-          }}
-      loop: "{{ group_filebeat_modules }}"
-      loop_control:
-        label: 
-          - "{{ item.module }}"
-      when: group_filebeat_modules is defined
   run_once: true
 
 - name: generate inputs var
   block:
-    - name: Generate all inputs configs
+    - name: Generate inputs config
       set_fact:
         filebeat_inputs: >
           {{
@@ -56,38 +29,11 @@
                 item
             )]
           }}
-      loop: "{{ all_filebeat_inputs }}"
+      loop:
+        - "{{ all_filebeat_inputs | default() }}"
+        - "{{ host_filebeat_inputs | default() }}"
+        - "{{ group_filebeat_inputs | default() }}"
       loop_control:
         label: 
           - "{{ item.type }}"
-      when: all_filebeat_inputs is defined
-
-    - name: Generate host inputs configs
-      set_fact:
-        filebeat_inputs: >
-          {{
-            (filebeat_inputs | default([]))
-            + [dict(
-                item
-            )]
-          }}
-      loop: "{{ host_filebeat_inputs }}"
-      loop_control:
-        label: 
-          - "{{ item.type }}"
-      when: host_filebeat_inputs is defined  
-    - name: Generate group inputs configs
-      set_fact:
-        filebeat_inputs: >
-          {{
-            (filebeat_inputs | default([]))
-            + [dict(
-                item
-            )]
-          }}
-      loop: "{{ group_filebeat_inputs }}"
-      loop_control:
-        label: 
-          - "{{ item.type }}"
-      when: group_filebeat_inputs is defined  
   run_once: true
